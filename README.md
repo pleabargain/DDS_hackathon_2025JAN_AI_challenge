@@ -21,6 +21,7 @@ A Python-based form processing system that helps users provide better-quality re
 ## Files
 
 - `process_form.py`: Main form processing script
+- `generate_docs.py`: Documentation generation script for form responses
 - `schema.json`: JSON schema for form data validation
 - `test_data.json`: Example form data
 - `day1form.md`: Form template in markdown format
@@ -61,6 +62,14 @@ A Python-based form processing system that helps users provide better-quality re
    - You can also specify a custom filename if desired
    - When exiting, you'll be asked if you want to save as a new file
    - If no, it saves to the default location (`day1form.json`)
+
+## Documentation Generation
+
+To generate documentation from your form responses:
+```bash
+python generate_docs.py input.json
+```
+This will create both HTML and Markdown versions of your form responses with proper formatting.
 
 ## Logging
 

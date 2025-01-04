@@ -25,6 +25,7 @@ Repository: https://github.com/pleabargain/DDS_hackathon_2025JAN_AI_challenge
 - [x] File selection and operations
 - [x] Custom save locations
 - [x] Progress saving
+- [x] Save-as functionality during exit
 
 ### User Experience
 - [x] Clear instructions
@@ -34,6 +35,9 @@ Repository: https://github.com/pleabargain/DDS_hackathon_2025JAN_AI_challenge
 - [x] Command interface with visual box
 - [x] Edit previous answers
 - [x] Safe exit functionality
+- [x] Bold blue text for previous answers
+- [x] Return option to keep previous answers
+- [x] Options display after previous answers
 
 ## In Progress
 - [ ] Schema validation implementation
@@ -68,7 +72,9 @@ Repository: https://github.com/pleabargain/DDS_hackathon_2025JAN_AI_challenge
 - [x] AI suggestions
 - [x] Command interface
 - [x] Edit functionality
-- [x] Exit handling
+- [x] Exit handling with save-as option
+- [x] Return functionality
+- [x] Previous answer display
 - [ ] Schema validation
 - [ ] Error scenarios
 - [ ] Edge cases
@@ -78,5 +84,6 @@ Repository: https://github.com/pleabargain/DDS_hackathon_2025JAN_AI_challenge
 - [x] Usage guide
 - [x] File structure
 - [x] Error handling
+- [x] UI patterns
 - [ ] Testing guide
 - [ ] Contribution guide

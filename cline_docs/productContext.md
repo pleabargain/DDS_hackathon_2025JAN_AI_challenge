@@ -29,6 +29,8 @@ The AI-Enhanced Form Processing System is designed to help users provide compreh
 
 2. **Progress Management**
    - Save/load functionality
+   - Save-as option during exit
+   - Multiple save file support
    - Real-time progress tracking
    - Interrupt-safe operations
 

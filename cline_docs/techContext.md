@@ -39,7 +39,9 @@ datetime    # Time operations
 1. **JSON Files**
    - Schema: `schema.json`
    - Example: `test_data.json`
-   - User Data: `day1form.json`
+   - User Data: `day1form.json` (default)
+   - Support for custom save filenames
+   - Save-as functionality during exit
 
 2. **Form Template**
    - Format: Markdown
@@ -95,6 +97,8 @@ datetime    # Time operations
 1. **Manual Testing**
    - Form completion
    - Save/load operations
+   - Save-as functionality
+   - Exit save prompts
    - Error scenarios
 
 2. **Data Validation**
@@ -109,6 +113,8 @@ datetime    # Time operations
    - Safe file handling
    - Backup considerations
    - Error recovery
+   - Multiple file management
+   - Save-as validation
 
 2. **Input Validation**
    - User input sanitization
