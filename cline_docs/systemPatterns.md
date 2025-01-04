@@ -11,19 +11,13 @@ Repository: https://github.com/pleabargain/DDS_hackathon_2025JAN_AI_challenge
    - Manages form flow
    - Coordinates other components
 
-2. **AI Integration**
-   - Ollama API client
-   - Suggestion generation
-   - Model selection
-   - Error handling for AI operations
-
-3. **Data Management**
+2. **Data Management**
    - JSON file operations
    - Schema validation
    - Progress saving/loading
    - Data structure maintenance
 
-4. **Logging System**
+3. **Logging System**
    - Real-time file logging
    - Operation tracking
    - Error monitoring
@@ -37,7 +31,7 @@ Repository: https://github.com/pleabargain/DDS_hackathon_2025JAN_AI_challenge
 - Available commands:
   * SAVE: Save current progress
   * EDIT: Modify previous answers
-  * EXIT: Save (with optional save-as) and quit safely
+  * EXIT: Save and quit safely
   * RETURN: Accept previous answer and continue
 - Command validation and execution
 - Consistent command handling across input contexts
@@ -64,30 +58,25 @@ Repository: https://github.com/pleabargain/DDS_hackathon_2025JAN_AI_challenge
 - Real-time updates
 - Progress tracking
 
-### 5. Strategy Pattern
-- AI model selection
-- Response processing
-- Data validation
-
 ## Data Flow
 1. **Input Processing**
    ```
-   User Input -> Validation -> AI Enhancement -> Storage
+   User Input -> Validation -> Storage
    ```
 
 2. **Save Operation**
    ```
-   Command Detection -> Progress Capture -> [Optional: Save-As Prompt] -> Filename Generation -> JSON Serialization -> File Write
+   Command Detection -> Progress Capture -> Filename Generation -> JSON Serialization -> File Write
    ```
 
    Filename Generation:
    ```
-   Project Title -> Clean/Sanitize -> Truncate -> Add Timestamp -> {project_title}_{timestamp}.json
+   User Input -> Add Timestamp -> {user_input}_{timestamp}.json
    ```
 
    Exit Save Flow:
    ```
-   EXIT Command -> Save-As Prompt -> [Yes: Smart Filename | No: Default File] -> Save Progress -> Exit
+   EXIT Command -> Get User Input -> Generate Filename -> Save Progress -> Exit
    ```
 
 3. **Load Operation**
@@ -123,8 +112,7 @@ project/
 ├── schema.json        # Data validation
 ├── test_data.json    # Example data
 ├── day1form.md       # Form template
-├── day1form.json     # User responses
-├── logs/             # Generated logs
+├── form_processor.log # System logs
 └── cline_docs/       # Project documentation
     ├── activeContext.md
     ├── productContext.md
@@ -159,5 +147,5 @@ project/
    - Safe file operations
    - Progress preservation
    - Previous answer retention
-   - Multiple save file support
-   - Save-as functionality during exit
+   - Custom file naming with datestamp
+   - Consistent file format

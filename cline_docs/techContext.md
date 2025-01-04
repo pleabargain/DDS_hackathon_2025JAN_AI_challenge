@@ -9,17 +9,11 @@ Repository: https://github.com/pleabargain/DDS_hackathon_2025JAN_AI_challenge
    - Version: 3.x
    - Core language for application
 
-2. **Ollama**
-   - Local AI model server
-   - Required for AI suggestions
-   - Installation: https://ollama.ai/download
-
 ### Dependencies
 ```python
 # Core Dependencies
 json        # JSON handling
 re          # Regular expressions
-requests    # HTTP client
 sys         # System functions
 os          # File operations
 logging     # Logging system
@@ -31,7 +25,7 @@ datetime    # Time operations
 
 ### Logging
 - Real-time file logging enabled
-- Log files: `form_processor_[timestamp].log`
+- Log file: `form_processor.log`
 - Debug level logging
 - Both file and console output
 
@@ -39,40 +33,32 @@ datetime    # Time operations
 1. **JSON Files**
    - Schema: `schema.json`
    - Example: `test_data.json`
-   - User Data: `day1form.json` (default)
-   - Support for custom save filenames
-   - Save-as functionality during exit
+   - Support for custom save filenames with datestamp
+   - Format: `{user_input}_{timestamp}.json`
 
 2. **Form Template**
    - Format: Markdown
    - File: `day1form.md`
 
-### AI Integration
-1. **Ollama API**
-   - Endpoint: http://localhost:11434
-   - Default Model: llama3.2:latest
-   - Configurable model selection
-
 ## Technical Constraints
 
 ### System Requirements
 1. **Hardware**
-   - Sufficient RAM for AI model
+   - Basic system requirements
    - Storage for logs and data
 
 2. **Network**
-   - Local network access
-   - Ollama API connectivity
+   - No network requirements
+   - Fully offline capable
 
 ### Performance Considerations
 1. **Response Time**
-   - AI suggestion latency
    - File operation speed
    - Log writing performance
 
 2. **Resource Usage**
    - Memory management
-   - Log file growth
+   - Log file rotation
    - JSON file size
 
 ## Development Guidelines
@@ -97,7 +83,7 @@ datetime    # Time operations
 1. **Manual Testing**
    - Form completion
    - Save/load operations
-   - Save-as functionality
+   - Custom file naming
    - Exit save prompts
    - Error scenarios
 
@@ -114,15 +100,9 @@ datetime    # Time operations
    - Backup considerations
    - Error recovery
    - Multiple file management
-   - Save-as validation
+   - File naming validation
 
 2. **Input Validation**
    - User input sanitization
    - Command validation
    - Path verification
-
-### API Security
-1. **Ollama Integration**
-   - Local-only access
-   - Error handling
-   - Rate limiting
