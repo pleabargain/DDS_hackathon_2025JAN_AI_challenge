@@ -31,12 +31,17 @@ Repository: https://github.com/pleabargain/DDS_hackathon_2025JAN_AI_challenge
 - [x] AI suggestions
 - [x] Progress saving
 - [x] Error messages
+- [x] Command interface with visual box
+- [x] Edit previous answers
+- [x] Safe exit functionality
 
 ## In Progress
 - [ ] Schema validation implementation
 - [ ] Progress visualization
 - [ ] Enhanced error messages
 - [ ] Unit tests
+- [ ] Command history feature
+- [ ] Command shortcuts
 
 ## Planned Features
 - [ ] Data export functionality
@@ -61,6 +66,9 @@ Repository: https://github.com/pleabargain/DDS_hackathon_2025JAN_AI_challenge
 - [x] Basic functionality
 - [x] Save/load operations
 - [x] AI suggestions
+- [x] Command interface
+- [x] Edit functionality
+- [x] Exit handling
 - [ ] Schema validation
 - [ ] Error scenarios
 - [ ] Edge cases

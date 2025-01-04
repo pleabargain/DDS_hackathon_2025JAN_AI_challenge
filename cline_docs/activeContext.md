@@ -26,12 +26,25 @@ Maintaining and improving the form processing system with version control
    - Created log files with immediate writes
    - Added detailed logging throughout the code
 
-4. Added SAVE functionality
+4. Enhanced Command Interface
+   - Added clear UI box showing available commands
    - Users can save progress by typing 'SAVE' at any time
-   - Added save_progress function
-   - Updated user instructions
+   - Users can edit previous answers by typing 'EDIT'
+   - Users can safely exit with progress saved by typing 'EXIT'
+   - Updated user instructions with command explanations
 
-5. Added JSON loading functionality
+5. Added EDIT functionality
+   - Users can modify previous answers at any time
+   - Added edit_answer function with support for all field types
+   - Special handling for Key Features list editing
+   - AI suggestions available for edited answers
+
+6. Added EXIT functionality
+   - Users can safely exit the program at any time
+   - Automatically saves progress before exiting
+   - Clear feedback when saving and exiting
+
+7. Added JSON loading functionality
    - Created load_json function
    - Added ability to continue from previous progress
    - Added proper error handling for JSON operations
@@ -46,7 +59,7 @@ Maintaining and improving the form processing system with version control
    - JSON file selection
    - Custom save locations
    - Project title formatting
-   - SAVE functionality
+   - Command functionality (SAVE, EDIT, EXIT)
    - Loading previous progress
    - Real-time logging
    - JSON schema validation

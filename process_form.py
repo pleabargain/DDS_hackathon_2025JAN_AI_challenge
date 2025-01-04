@@ -303,8 +303,106 @@ def print_instructions():
     print("\nForm Processing Instructions:")
     print("- Answer each question as thoroughly as possible")
     print("- AI will provide suggestions to enhance your answers")
-    print("- Type 'SAVE' at any time to save your progress")
-    print("- Press Ctrl+C to exit\n")
+    print("\nAvailable Commands:")
+    print("┌─────────────────────────────────────────────┐")
+    print("│ SAVE - Save your progress at any time       │")
+    print("│ EDIT - Edit a previous answer              │")
+    print("│ EXIT - Exit the program (or press Ctrl+C)  │")
+    print("└─────────────────────────────────────────────┘\n")
+
+def edit_answer(results, selected_model):
+    """Allow user to edit a specific answer."""
+    logger.info("Starting answer editing process")
+    
+    # Display available fields
+    print("\nAvailable fields to edit:")
+    fields = list(results["responses"].keys())
+    for i, field in enumerate(fields, 1):
+        current_answer = results["responses"][field]["answer"]
+        if isinstance(current_answer, list):
+            print(f"{i}. {field}:")
+            for item in current_answer:
+                print(f"   - {item}")
+        else:
+            print(f"{i}. {field}: {current_answer}")
+    
+    # Get field selection
+    while True:
+        try:
+            choice = input("\nEnter the number of the field to edit (or 0 to cancel): ").strip()
+            if choice == '0':
+                return
+            
+            choice_idx = int(choice) - 1
+            if 0 <= choice_idx < len(fields):
+                field_to_edit = fields[choice_idx]
+                break
+            else:
+                print("Invalid selection. Please try again.")
+        except ValueError:
+            print("Please enter a valid number.")
+    
+    # Edit the selected field
+    current_data = results["responses"][field_to_edit]
+    print(f"\nCurrent answer for '{field_to_edit}':")
+    if isinstance(current_data["answer"], list):
+        for i, item in enumerate(current_data["answer"], 1):
+            print(f"{i}. {item}")
+        
+        # Handle Key Features editing
+        print("\nOptions:")
+        print("1. Add new feature")
+        print("2. Edit existing feature")
+        print("3. Delete feature")
+        edit_choice = input("Enter your choice (1-3): ").strip()
+        
+        if edit_choice == '1':
+            feature = input("Enter new feature: ").strip()
+            suggestion = get_ollama_suggestion(feature, selected_model)
+            if suggestion:
+                print(f"\nAI Suggestion: {suggestion}")
+                if input("\nUse this suggestion? (y/n): ").lower() == 'y':
+                    current_data["answer"].append(suggestion)
+                else:
+                    current_data["answer"].append(feature)
+            else:
+                current_data["answer"].append(feature)
+        
+        elif edit_choice == '2':
+            idx = int(input("Enter feature number to edit: ").strip()) - 1
+            if 0 <= idx < len(current_data["answer"]):
+                new_feature = input("Enter new feature: ").strip()
+                suggestion = get_ollama_suggestion(new_feature, selected_model)
+                if suggestion:
+                    print(f"\nAI Suggestion: {suggestion}")
+                    if input("\nUse this suggestion? (y/n): ").lower() == 'y':
+                        current_data["answer"][idx] = suggestion
+                    else:
+                        current_data["answer"][idx] = new_feature
+                else:
+                    current_data["answer"][idx] = new_feature
+        
+        elif edit_choice == '3':
+            idx = int(input("Enter feature number to delete: ").strip()) - 1
+            if 0 <= idx < len(current_data["answer"]):
+                del current_data["answer"][idx]
+    
+    else:
+        print(current_data["answer"])
+        new_answer = input("\nEnter new answer: ").strip()
+        suggestion = get_ollama_suggestion(new_answer, selected_model)
+        if suggestion:
+            print(f"\nAI Suggestion: {suggestion}")
+            if input("\nUse this suggestion? (y/n): ").lower() == 'y':
+                current_data["answer"] = suggestion
+            else:
+                current_data["answer"] = new_answer
+        else:
+            current_data["answer"] = new_answer
+    
+    # Save changes
+    save_progress(results)
+    print(f"\nSuccessfully updated {field_to_edit}")
 
 def format_title_answer(answer):
     """Format the title answer with 'Project Title: ' prefix if not present."""
@@ -316,6 +414,19 @@ def main():
     logger.info("Starting form processing")
     try:
         print_instructions()
+        
+        # Handle command line argument for edit mode
+        if len(sys.argv) > 1 and sys.argv[1].lower() == '--edit':
+            json_file = prompt_for_json_file()
+            existing_data = load_json(json_file)
+            if existing_data:
+                selected_model = select_model()
+                existing_data["metadata"]["model"] = selected_model
+                edit_answer(existing_data, selected_model)
+                sys.exit(0)
+            else:
+                print("No existing data found to edit.")
+                sys.exit(1)
         
         # Prompt for JSON file to load
         json_file = prompt_for_json_file()
@@ -404,6 +515,11 @@ def main():
                     if feature.upper() == 'SAVE':
                         save_progress(results)
                         continue
+                    if feature.upper() == 'EXIT':
+                        print("\nSaving progress before exit...")
+                        save_progress(results)
+                        print("Goodbye!")
+                        sys.exit(0)
                     if feature:
                         # Get AI suggestion for each feature
                         print("\nGetting AI suggestion...")
@@ -439,6 +555,14 @@ def main():
                 if user_answer.upper() == 'SAVE':
                     save_progress(results)
                     continue
+                elif user_answer.upper() == 'EDIT':
+                    edit_answer(results, selected_model)
+                    continue
+                elif user_answer.upper() == 'EXIT':
+                    print("\nSaving progress before exit...")
+                    save_progress(results)
+                    print("Goodbye!")
+                    sys.exit(0)
                 elif user_answer:
                     # Get AI suggestion
                     print("\nGetting AI suggestion...")

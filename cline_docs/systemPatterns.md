@@ -32,9 +32,14 @@ Repository: https://github.com/pleabargain/DDS_hackathon_2025JAN_AI_challenge
 ## Design Patterns
 
 ### 1. Command Pattern
-- User input handling
-- SAVE command implementation
+- User input handling through standardized commands
+- Command box UI pattern for clear user guidance
+- Available commands:
+  * SAVE: Save current progress
+  * EDIT: Modify previous answers
+  * EXIT: Save and quit safely
 - Command validation and execution
+- Consistent command handling across input contexts
 
 ### 2. Factory Pattern
 - Question generation
@@ -110,6 +115,14 @@ project/
    - Function-specific modules
    - Clear responsibility separation
    - Consistent naming conventions
+   - Command pattern implementation
+   - UI pattern consistency
+
+2. **User Interface**
+   - Clear command visibility
+   - Consistent command behavior
+   - Visual feedback for actions
+   - Safe exit paths
 
 2. **Error Management**
    - Comprehensive error handling

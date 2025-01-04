@@ -43,10 +43,15 @@ A Python-based form processing system that helps users provide better-quality re
    - Choose to continue progress or start fresh
    - Answer each question thoroughly
    - AI will provide suggestions to enhance your answers
+
+   Available Commands:
    - Type 'SAVE' at any time to save your progress
-   - Previous answers will be shown in blue when continuing from saved progress
+   - Type 'EDIT' to modify a previous answer
+   - Type 'EXIT' to save and quit (or press Ctrl+C)
+
+   Additional Features:
+   - Previous answers shown in blue when continuing from saved progress
    - Choose where to save your JSON file at completion
-   - Press Ctrl+C to exit
 
 4. Your responses will be saved in `day1form.json`
 

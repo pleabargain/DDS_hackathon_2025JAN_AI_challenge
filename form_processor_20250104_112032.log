@@ -1,0 +1,34 @@
+2025-01-04 11:20:32,430 - __main__ - INFO - Log file created at: form_processor_20250104_112032.log
+2025-01-04 11:20:32,431 - __main__ - INFO - Starting form processing
+2025-01-04 11:20:32,432 - __main__ - INFO - Prompting user for JSON file selection
+2025-01-04 11:20:36,286 - __main__ - INFO - User selected file: test_data.json
+2025-01-04 11:20:36,287 - __main__ - INFO - Attempting to load JSON file: test_data.json
+2025-01-04 11:20:36,288 - __main__ - DEBUG - Successfully loaded JSON from test_data.json
+2025-01-04 11:20:39,095 - __main__ - INFO - Continuing with existing progress
+2025-01-04 11:20:39,095 - __main__ - INFO - Selecting AI model
+2025-01-04 11:20:39,095 - __main__ - INFO - Starting model selection process
+2025-01-04 11:20:39,095 - __main__ - INFO - Fetching available Ollama models
+2025-01-04 11:20:39,097 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:11434
+2025-01-04 11:20:41,118 - urllib3.connectionpool - DEBUG - http://localhost:11434 "GET /api/tags HTTP/1.1" 200 None
+2025-01-04 11:20:41,119 - __main__ - DEBUG - Found models: ['llama3.3:70b-instruct-q4_K_S', 'llama3.2-vision:latest', 'marco-o1:latest', 'phi3:latest', 'research-phi3:latest', 'phi3:14b-instruct', 'qwen2.5:latest', 'llama3.2:latest', 'NAME:latest', 'llava:13b', 'mxbai-embed-large:latest', 'nomic-embed-text:latest', 'x/llama3.2-vision:latest', 'mistral:latest', 'granite3-dense:latest']
+2025-01-04 11:20:42,605 - __main__ - INFO - User selected default model (llama3.2:latest)
+2025-01-04 11:20:42,606 - __main__ - INFO - Reading markdown file
+2025-01-04 11:20:42,606 - __main__ - INFO - Attempting to read markdown file: day1form.md
+2025-01-04 11:20:42,606 - __main__ - DEBUG - Successfully read 2133 characters from day1form.md
+2025-01-04 11:20:42,607 - __main__ - INFO - Extracting fields from content
+2025-01-04 11:20:42,607 - __main__ - INFO - Starting field extraction from markdown content
+2025-01-04 11:20:42,607 - __main__ - DEBUG - Split content into 47 lines
+2025-01-04 11:20:42,607 - __main__ - DEBUG - Found new field: Project Title
+2025-01-04 11:20:42,607 - __main__ - DEBUG - Found new field: Concept Summary
+2025-01-04 11:20:42,607 - __main__ - DEBUG - Found new field: Target Audience
+2025-01-04 11:20:42,608 - __main__ - DEBUG - Found new field: Key Features
+2025-01-04 11:20:42,608 - __main__ - DEBUG - Found new field: Technical Approach
+2025-01-04 11:20:42,608 - __main__ - DEBUG - Found new field: Expected Challenges
+2025-01-04 11:20:42,608 - __main__ - DEBUG - Found new field: Submission Format
+2025-01-04 11:20:42,608 - __main__ - DEBUG - Found new field: Expected Outcome
+2025-01-04 11:20:42,608 - __main__ - DEBUG - Found new field: Additional Notes (Optional)
+2025-01-04 11:20:42,608 - __main__ - INFO - Successfully extracted 9 fields
+2025-01-04 11:20:42,609 - __main__ - INFO - Generating questions
+2025-01-04 11:20:42,609 - __main__ - INFO - Generating questions from fields
+2025-01-04 11:20:42,609 - __main__ - DEBUG - Processing fields: ['Project Title', 'Concept Summary', 'Target Audience', 'Key Features', 'Technical Approach', 'Expected Challenges', 'Submission Format', 'Expected Outcome', 'Additional Notes (Optional)']
+2025-01-04 11:20:42,609 - __main__ - INFO - Processing fields and getting user input
