@@ -1,26 +1,50 @@
 instructions
-you are a python developer
-you are tasked with creating a python script that will analyze the day1form.md and create a new file called day1form.json
-the purpose of the script is to help the user create a details plan for creating a project
-create a pyhton script that will analyze the day1form.md and create a new file called day1form.json
-analyze the day1form.md and create a new file called day1form.json
-populate the json file with the data from the day1form.md
-each field is a key in the json file
-each key is a string
-each string will be formed into a question and answer pair
-example: Project Title:
-becomes: "Project Title": "What is the title of your project?"
-user enters the answer in the format of a string
-the answer will be stored in the json file as a string
-the question will be stored in the json file as a string
-the question and answer pair will be stored in the json file as a key and value pair
-the json file will be stored in the same directory as the day1form.md file
-the json file will be named day1form.json
-for each answer, the answer will be passed to ollama for processing
-the ollama engine will return an idea for the answer
-user will be asked to review the idea and if they are satisfied with the idea, they will enter y or n
-if the user is not satisfied with the idea, they will be asked to enter a new answer
-the process will repeat until the user is satisfied with the idea
-the json file will be stored in the same directory as the day1form.md file
-the json file will be named day1form.json
+# Python Developer Instructions
 
+## Task Overview
+You are tasked with creating a Python script that will analyze day1form.md and create day1form.json to help users create detailed project plans.
+
+## Core Requirements
+1. Analyze day1form.md and create day1form.json
+2. Convert form fields to JSON key-value pairs
+3. Generate interactive questions from fields
+4. Process answers through Ollama AI
+5. Store final results in JSON format
+
+## Error Logging Requirements
+1. Each function must implement detailed error logging:
+   - Log function entry with parameters
+   - Log all significant operations
+   - Catch and log all potential exceptions
+   - Include error context and stack traces
+   - Log success/failure of operations
+
+## Data Structure
+- Each field becomes a JSON key
+- Each key contains:
+  - Question string
+  - Answer string
+Example:
+```json
+{
+  "Project Title": {
+    "question": "What is the title of your project?",
+    "answer": "User's answer here"
+  }
+}
+```
+
+## Process Flow
+1. Read markdown file
+2. Extract fields
+3. For each field:
+   - Present question
+   - Get user answer
+   - Process through Ollama
+   - Get user approval (y/n)
+   - Repeat if needed
+4. Save to JSON file
+
+## File Locations
+- Input: day1form.md (same directory)
+- Output: day1form.json (same directory)

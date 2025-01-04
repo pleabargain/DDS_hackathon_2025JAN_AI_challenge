@@ -1,19 +1,20 @@
 # Active Context
 
 ## Current Work
-- Python script implementation
-- Setting up AI integration
-- Testing core functionality
+- Installation process improvements
+- Documentation updates
+- Package management
 
 ## Recent Changes
-- Created initial Python script (process_form.py)
-- Implemented markdown parsing logic
-- Added JSON generation capability
-- Set up Ollama AI integration structure
+- Created requirements.txt with all dependencies
+- Added Ollama package installation instructions
+- Updated README.md with installation steps
+- Changed default model to llama3.2:latest
+- Simplified installation process
 
 ## Next Steps
-1. Test Ollama AI connectivity
-2. Validate markdown parsing
-3. Test JSON output format
-4. Run end-to-end testing
-5. Document usage instructions
+1. Test installation process on clean environment
+2. Verify Ollama package integration
+3. Test model selection with llama3.2:latest
+4. Create example outputs for documentation
+5. Add error handling for package installation

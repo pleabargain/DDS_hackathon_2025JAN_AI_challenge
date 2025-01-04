@@ -1,0 +1,12 @@
+# Core dependencies
+requests
+ollama
+
+# Development dependencies (optional)
+pytest
+black
+pylint
+
+# Installation notes
+pip install -r requirements.txt
+pip install -U ollama
