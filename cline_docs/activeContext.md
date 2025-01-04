@@ -1,10 +1,17 @@
 # Active Context
 
+Repository: https://github.com/pleabargain/DDS_hackathon_2025JAN_AI_challenge
+
 ## Current Task
-Updating process_form.py with new features and improving documentation
+Maintaining and improving the form processing system with version control
 
 ## Recent Changes
-1. Enhanced JSON file handling
+1. Version Control Integration
+   - Added repository information to documentation
+   - Implemented Git workflow for changes
+   - Updated README.md with repository link
+
+2. Enhanced JSON file handling
    - Added prompt_for_json_file function to select input file
    - Added prompt_for_save_location function for custom save locations
    - Added format_title_answer function for consistent project titles

@@ -1,5 +1,7 @@
 # Progress Tracking
 
+Repository: https://github.com/pleabargain/DDS_hackathon_2025JAN_AI_challenge
+
 ## Completed Features
 
 ### Core Functionality
@@ -11,15 +13,17 @@
 - [x] Error handling
 
 ### Documentation
-- [x] README.md
-- [x] Memory bank files
+- [x] README.md with repository link
+- [x] Memory bank files with repository context
 - [x] Code comments
 - [x] Function docstrings
+- [x] Git integration
 
 ### Data Management
 - [x] JSON schema creation
 - [x] Example data
-- [x] File operations
+- [x] File selection and operations
+- [x] Custom save locations
 - [x] Progress saving
 
 ### User Experience

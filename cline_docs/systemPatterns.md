@@ -1,5 +1,7 @@
 # System Patterns
 
+Repository: https://github.com/pleabargain/DDS_hackathon_2025JAN_AI_challenge
+
 ## Architecture Overview
 
 ### Core Components
@@ -94,7 +96,13 @@ project/
 ├── test_data.json    # Example data
 ├── day1form.md       # Form template
 ├── day1form.json     # User responses
-└── logs/             # Generated logs
+├── logs/             # Generated logs
+└── cline_docs/       # Project documentation
+    ├── activeContext.md
+    ├── productContext.md
+    ├── systemPatterns.md
+    ├── techContext.md
+    └── progress.md
 ```
 
 ## Best Practices

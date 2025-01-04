@@ -1,5 +1,7 @@
 # Technical Context
 
+Repository: https://github.com/pleabargain/DDS_hackathon_2025JAN_AI_challenge
+
 ## Development Environment
 
 ### Required Software
@@ -19,6 +21,7 @@ json        # JSON handling
 re          # Regular expressions
 requests    # HTTP client
 sys         # System functions
+os          # File operations
 logging     # Logging system
 traceback   # Error tracking
 datetime    # Time operations

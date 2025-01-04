@@ -1,5 +1,7 @@
 # AI-Enhanced Form Processing System
 
+Repository: https://github.com/pleabargain/DDS_hackathon_2025JAN_AI_challenge
+
 A Python-based form processing system that helps users provide better-quality responses through AI-powered suggestions and real-time feedback.
 
 ## Features
@@ -27,7 +29,10 @@ A Python-based form processing system that helps users provide better-quality re
 
 ## Usage
 
-1. Ensure you have Python installed and Ollama running
+1. Requirements:
+   - Python installed
+   - Ollama running
+   - Git for version control
 2. Run the script:
    ```bash
    python process_form.py
