@@ -1,6 +1,5 @@
 import json
 import re
-import requests
 import sys
 import os
 import logging
@@ -111,20 +110,17 @@ def save_progress(results, prompt_save=False, exit_save=False):
     """Save current progress to JSON file."""
     logger.info("Saving current progress")
     try:
-        # Get user input from project title if available
-        user_input = "form"
-        if "Project Title" in results.get("responses", {}):
-            title = results["responses"]["Project Title"]["answer"]
-            # Extract the actual title without the prefix and clean it
-            if title.startswith("Project Title: "):
-                title = title[14:]
-            user_input = re.sub(r'[^a-zA-Z0-9]', '_', title.lower())[:30]  # Limit length and clean
-        
-        if exit_save:
-            save_new = input("\nWould you like to save as a new file? (y/n): ").lower().strip() == 'y'
-            filename = prompt_for_save_location(user_input) if save_new else 'day1form.json'
+        # Get user input for filename prefix
+        if prompt_save or exit_save:
+            user_input = input("\nEnter a name for your file: ").strip()
+            if not user_input:
+                user_input = "form"
         else:
-            filename = prompt_for_save_location(user_input) if prompt_save else 'day1form.json'
+            user_input = "form"
+            
+        # Generate filename with datestamp
+        datestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"{user_input}_{datestamp}.json"
         
         with open(filename, 'w') as f:
             json.dump(results, f, indent=4)
@@ -231,109 +227,10 @@ def generate_questions(fields):
             questions[field] = "Do you have any additional information to add?"
     return questions
 
-def get_available_models():
-    """Get list of available Ollama models."""
-    logger.info("Fetching available Ollama models")
-    try:
-        response = requests.get('http://localhost:11434/api/tags')
-        if response.status_code == 200:
-            models = [model['name'] for model in response.json()['models']]
-            logger.debug(f"Found models: {models}")
-            return models
-        else:
-            logger.error(f"Failed to get models. Status code: {response.status_code}")
-            return None
-    except Exception as e:
-        logger.error(f"Error getting models: {str(e)}")
-        return None
-
-def select_model():
-    """Prompt user to select an Ollama model."""
-    logger.info("Starting model selection process")
-    models = get_available_models()
-    default_model = "llama3.2:latest"
-    
-    if not models:
-        logger.warning(f"No models found, checking if {default_model} is available")
-        try:
-            response = requests.post(
-                'http://localhost:11434/api/generate',
-                json={"model": default_model, "prompt": "test"}
-            )
-            if response.status_code == 200:
-                logger.info(f"{default_model} is available")
-                return default_model
-            else:
-                logger.error(f"Failed to use {default_model}. Please ensure it's installed.")
-                print(f"\nERROR: {default_model} is not available")
-                print(f"Please run: ollama pull {default_model}")
-                sys.exit(1)
-        except requests.exceptions.ConnectionError:
-            logger.error("Could not connect to Ollama API")
-            print("\nERROR: Could not connect to Ollama API")
-            print("Please ensure Ollama is installed and running")
-            print("Installation instructions: https://ollama.ai/download")
-            sys.exit(1)
-    
-    print("\nAvailable models:")
-    for i, model in enumerate(models, 1):
-        print(f"{i}. {model}")
-    
-    while True:
-        try:
-            choice = input(f"\nSelect a model number (or press Enter for default '{default_model}'): ").strip()
-            if not choice:
-                logger.info(f"User selected default model ({default_model})")
-                return default_model
-            
-            choice_idx = int(choice) - 1
-            if 0 <= choice_idx < len(models):
-                selected_model = models[choice_idx]
-                logger.info(f"User selected model: {selected_model}")
-                return selected_model
-            else:
-                print("Invalid selection. Please try again.")
-        except ValueError:
-            print("Please enter a valid number.")
-
-def get_ollama_suggestion(answer, model):
-    """Get suggestion from Ollama AI."""
-    logger.info(f"Requesting suggestion from Ollama AI using model: {model}")
-    logger.debug(f"Input answer: {answer}")
-    
-    try:
-        logger.debug("Sending POST request to Ollama API")
-        response = requests.post(
-            'http://localhost:11434/api/generate', 
-            json={
-                "model": model,
-                "prompt": f"Based on this answer: '{answer}', suggest an improved or enhanced version that maintains the core idea but adds more detail or clarity."
-            }
-        )
-        
-        if response.status_code == 200:
-            suggestion = response.json()['response']
-            logger.debug(f"Received suggestion from Ollama: {suggestion}")
-            return suggestion
-        else:
-            logger.error(f"Ollama API error - Status code: {response.status_code}")
-            logger.error(f"Response content: {response.text}")
-            return None
-            
-    except requests.exceptions.ConnectionError:
-        logger.error("Connection error - Unable to connect to Ollama API")
-        logger.error(f"Stack trace: {traceback.format_exc()}")
-        return None
-    except Exception as e:
-        logger.error(f"Unexpected error while getting Ollama suggestion: {str(e)}")
-        logger.error(f"Stack trace: {traceback.format_exc()}")
-        return None
-
 def print_instructions():
     """Print usage instructions."""
     print("\nForm Processing Instructions:")
     print("- Answer each question as thoroughly as possible")
-    print("- AI will provide suggestions to enhance your answers")
     print("\nAvailable Commands:")
     print("┌─────────────────────────────────────────────┐")
     print("│ SAVE   - Save your progress at any time     │")
@@ -342,7 +239,7 @@ def print_instructions():
     print("│ RETURN - Accept the previous answer        │")
     print("└─────────────────────────────────────────────┘\n")
 
-def edit_answer(results, selected_model):
+def edit_answer(results):
     """Allow user to edit a specific answer."""
     logger.info("Starting answer editing process")
     
@@ -390,29 +287,13 @@ def edit_answer(results, selected_model):
         
         if edit_choice == '1':
             feature = input("Enter new feature: ").strip()
-            suggestion = get_ollama_suggestion(feature, selected_model)
-            if suggestion:
-                print(f"\nAI Suggestion: {suggestion}")
-                if input("\nUse this suggestion? (y/n): ").lower() == 'y':
-                    current_data["answer"].append(suggestion)
-                else:
-                    current_data["answer"].append(feature)
-            else:
-                current_data["answer"].append(feature)
+            current_data["answer"].append(feature)
         
         elif edit_choice == '2':
             idx = int(input("Enter feature number to edit: ").strip()) - 1
             if 0 <= idx < len(current_data["answer"]):
                 new_feature = input("Enter new feature: ").strip()
-                suggestion = get_ollama_suggestion(new_feature, selected_model)
-                if suggestion:
-                    print(f"\nAI Suggestion: {suggestion}")
-                    if input("\nUse this suggestion? (y/n): ").lower() == 'y':
-                        current_data["answer"][idx] = suggestion
-                    else:
-                        current_data["answer"][idx] = new_feature
-                else:
-                    current_data["answer"][idx] = new_feature
+                current_data["answer"][idx] = new_feature
         
         elif edit_choice == '3':
             idx = int(input("Enter feature number to delete: ").strip()) - 1
@@ -422,15 +303,7 @@ def edit_answer(results, selected_model):
     else:
         print(current_data["answer"])
         new_answer = input("\nEnter new answer: ").strip()
-        suggestion = get_ollama_suggestion(new_answer, selected_model)
-        if suggestion:
-            print(f"\nAI Suggestion: {suggestion}")
-            if input("\nUse this suggestion? (y/n): ").lower() == 'y':
-                current_data["answer"] = suggestion
-            else:
-                current_data["answer"] = new_answer
-        else:
-            current_data["answer"] = new_answer
+        current_data["answer"] = new_answer
     
     # Save changes
     save_progress(results)
@@ -452,9 +325,7 @@ def main():
             json_file = prompt_for_json_file()
             existing_data = load_json(json_file)
             if existing_data:
-                selected_model = select_model()
-                existing_data["metadata"]["model"] = selected_model
-                edit_answer(existing_data, selected_model)
+                edit_answer(existing_data)
                 sys.exit(0)
             else:
                 print("No existing data found to edit.")
@@ -475,7 +346,6 @@ def main():
             else:
                 results = {
                     "metadata": {
-                        "model": None,
                         "timestamp": datetime.now().isoformat()
                     },
                     "responses": {}
@@ -484,16 +354,11 @@ def main():
         else:
             results = {
                 "metadata": {
-                    "model": None,
                     "timestamp": datetime.now().isoformat()
                 },
                 "responses": {}
             }
             logger.info("Starting fresh - no existing progress found")
-
-        # Select AI model
-        logger.info("Selecting AI model")
-        selected_model = select_model()
         
         # Read markdown file
         logger.info("Reading markdown file")
@@ -506,19 +371,6 @@ def main():
         # Generate questions
         logger.info("Generating questions")
         questions = generate_questions(fields)
-        
-        # Update metadata if starting fresh
-        if not existing_data:
-            results = {
-                "metadata": {
-                    "model": selected_model,
-                    "timestamp": datetime.now().isoformat()
-                },
-                "responses": {}
-            }
-        else:
-            # Update only the model in existing data
-            results["metadata"]["model"] = selected_model
         
         # Process each field
         logger.info("Processing fields and getting user input")
@@ -555,29 +407,7 @@ def main():
                         print("Goodbye!")
                         sys.exit(0)
                     if feature:
-                        # Get AI suggestion for each feature
-                        print("\nGetting AI suggestion...")
-                        suggestion = get_ollama_suggestion(feature, selected_model)
-                        
-                        if suggestion:
-                            print(f"\nAI Suggestion: {suggestion}")
-                            satisfied = input("\nAre you satisfied with this suggestion? (y/n): ").lower()
-                            
-                            while satisfied != 'y':
-                                feature = input("\nPlease provide a new feature: ").strip()
-                                print("\nGetting new AI suggestion...")
-                                suggestion = get_ollama_suggestion(feature, selected_model)
-                                if suggestion:
-                                    print(f"\nAI Suggestion: {suggestion}")
-                                    satisfied = input("\nAre you satisfied with this suggestion? (y/n): ").lower()
-                                else:
-                                    print("Using your original feature due to AI service error.")
-                                    suggestion = feature
-                                    satisfied = 'y'
-                            
-                            features.append(suggestion)
-                        else:
-                            features.append(feature)
+                        features.append(feature)
                 
                 results["responses"][field] = {
                     "question": question,
@@ -590,7 +420,7 @@ def main():
                     save_progress(results)
                     continue
                 elif user_answer.upper() == 'EDIT':
-                    edit_answer(results, selected_model)
+                    edit_answer(results)
                     continue
                 elif user_answer.upper() == 'EXIT':
                     print("\nSaving progress before exit...")
@@ -605,27 +435,7 @@ def main():
                     }
                     continue
                 elif user_answer:
-                    # Get AI suggestion
-                    print("\nGetting AI suggestion...")
-                    suggestion = get_ollama_suggestion(user_answer, selected_model)
-                    
-                    if suggestion:
-                        print(f"\nAI Suggestion: {suggestion}")
-                        satisfied = input("\nAre you satisfied with this suggestion? (y/n): ").lower()
-                        
-                        while satisfied != 'y':
-                            user_answer = input("\nPlease provide a new answer: ").strip()
-                            print("\nGetting new AI suggestion...")
-                            suggestion = get_ollama_suggestion(user_answer, selected_model)
-                            if suggestion:
-                                print(f"\nAI Suggestion: {suggestion}")
-                                satisfied = input("\nAre you satisfied with this suggestion? (y/n): ").lower()
-                            else:
-                                print("Using your original answer due to AI service error.")
-                                suggestion = user_answer
-                                satisfied = 'y'
-                        
-                    final_answer = suggestion if suggestion else user_answer
+                    final_answer = user_answer
                     if field == "Project Title":
                         final_answer = format_title_answer(final_answer)
                     

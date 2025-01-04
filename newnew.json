@@ -1,0 +1,23 @@
+{
+    "metadata": {
+        "timestamp": "2025-01-04T12:31:42.862914"
+    },
+    "responses": {
+        "Project Title": {
+            "question": "What is the title of your project?",
+            "answer": ""
+        },
+        "Concept Summary": {
+            "question": "What is the main concept of your project and what problem does it solve?",
+            "answer": ""
+        },
+        "Target Audience": {
+            "question": "Who is the target audience for your project and what are their needs?",
+            "answer": ""
+        },
+        "Key Features": {
+            "question": "What are the main features or functionalities of your application? (Enter one at a time, type 'done' when finished)",
+            "answer": []
+        }
+    }
+}

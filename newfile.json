@@ -6,7 +6,7 @@
     "responses": {
         "Project Title": {
             "question": "What is the title of your project?",
-            "answer": "An AI-Enhanced Form Processing System"
+            "answer": "AI-Enhanced Form Processing System"
         },
         "Concept Summary": {
             "question": "What is the main concept of your project and what problem does it solve?",
@@ -36,7 +36,7 @@
         },
         "Submission Format": {
             "question": "How will you present your final submission?",
-            "answer": "My complete JSON document containing all form responses, along with metadata about the AI model used and timestamps."
+            "answer": "A complete JSON document containing all form responses, along with metadata about the AI model used and timestamps."
         },
         "Expected Outcome": {
             "question": "What are your goals for this project?",

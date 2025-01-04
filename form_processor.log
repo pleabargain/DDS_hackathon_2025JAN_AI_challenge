@@ -1,0 +1,142 @@
+2025-01-04 12:04:26,922 - __main__ - INFO - Log file created at: form_processor.log
+2025-01-04 12:04:26,924 - __main__ - INFO - Starting form processing
+2025-01-04 12:04:26,924 - __main__ - INFO - Prompting user for JSON file selection
+2025-01-04 12:05:40,237 - __main__ - INFO - User selected file: day1form.json
+2025-01-04 12:05:40,238 - __main__ - INFO - Attempting to load JSON file: day1form.json
+2025-01-04 12:05:50,621 - __main__ - INFO - Continuing with existing progress
+2025-01-04 12:05:50,621 - __main__ - INFO - Selecting AI model
+2025-01-04 12:05:50,621 - __main__ - INFO - Starting model selection process
+2025-01-04 12:05:50,630 - __main__ - INFO - Fetching available Ollama models
+2025-01-04 12:05:54,270 - __main__ - INFO - User selected default model (llama3.2:latest)
+2025-01-04 12:05:54,270 - __main__ - INFO - Reading markdown file
+2025-01-04 12:05:54,270 - __main__ - INFO - Attempting to read markdown file: day1form.md
+2025-01-04 12:05:54,271 - __main__ - INFO - Extracting fields from content
+2025-01-04 12:05:54,271 - __main__ - INFO - Starting field extraction from markdown content
+2025-01-04 12:05:54,271 - __main__ - INFO - Successfully extracted 9 fields
+2025-01-04 12:05:54,271 - __main__ - INFO - Generating questions
+2025-01-04 12:05:54,271 - __main__ - INFO - Generating questions from fields
+2025-01-04 12:05:54,271 - __main__ - INFO - Processing fields and getting user input
+2025-01-04 12:06:07,213 - __main__ - INFO - Starting answer editing process
+2025-01-04 12:06:34,613 - __main__ - INFO - Requesting suggestion from Ollama AI using model: llama3.2:latest
+2025-01-04 12:06:52,176 - __main__ - ERROR - Unexpected error while getting Ollama suggestion: Extra data: line 2 column 1 (char 103)
+2025-01-04 12:06:52,178 - __main__ - ERROR - Stack trace: Traceback (most recent call last):
+  File "C:\Users\denni\AppData\Roaming\Python\Python312\site-packages\requests\models.py", line 963, in json
+    return complexjson.loads(self.content.decode(encoding), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\json\decoder.py", line 341, in decode
+    raise JSONDecodeError("Extra data", s, end)
+json.decoder.JSONDecodeError: Extra data: line 2 column 1 (char 103)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\denni\Documents\DDS_hackathon_2025JAN_AI_challenge\process_form.py", line 304, in get_ollama_suggestion
+    suggestion = response.json()['response']
+                 ^^^^^^^^^^^^^^^
+  File "C:\Users\denni\AppData\Roaming\Python\Python312\site-packages\requests\models.py", line 971, in json
+    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+requests.exceptions.JSONDecodeError: Extra data: line 2 column 1 (char 103)
+
+2025-01-04 12:06:52,179 - __main__ - INFO - Saving current progress
+2025-01-04 12:06:52,179 - __main__ - INFO - Successfully saved results to day1form.json
+2025-01-04 12:07:00,493 - __main__ - INFO - Saving current progress
+2025-01-04 12:07:02,253 - __main__ - INFO - Prompting user for save location
+2025-01-04 12:07:23,830 - __main__ - INFO - User selected save location: jan.json
+2025-01-04 12:07:23,831 - __main__ - INFO - Successfully saved results to jan.json
+2025-01-04 12:21:34,390 - __main__ - INFO - Log file created at: form_processor.log
+2025-01-04 12:21:34,391 - __main__ - INFO - Starting form processing
+2025-01-04 12:21:34,392 - __main__ - INFO - Prompting user for JSON file selection
+2025-01-04 12:21:46,977 - __main__ - INFO - User selected file: day1form.json
+2025-01-04 12:21:46,977 - __main__ - INFO - Attempting to load JSON file: day1form.json
+2025-01-04 12:21:50,073 - __main__ - INFO - Starting fresh despite existing progress
+2025-01-04 12:21:50,074 - __main__ - INFO - Selecting AI model
+2025-01-04 12:21:50,074 - __main__ - INFO - Starting model selection process
+2025-01-04 12:21:50,074 - __main__ - INFO - Fetching available Ollama models
+2025-01-04 12:21:56,553 - __main__ - INFO - User selected default model (llama3.2:latest)
+2025-01-04 12:21:56,554 - __main__ - INFO - Reading markdown file
+2025-01-04 12:21:56,554 - __main__ - INFO - Attempting to read markdown file: day1form.md
+2025-01-04 12:21:56,554 - __main__ - INFO - Extracting fields from content
+2025-01-04 12:21:56,554 - __main__ - INFO - Starting field extraction from markdown content
+2025-01-04 12:21:56,555 - __main__ - INFO - Successfully extracted 9 fields
+2025-01-04 12:21:56,555 - __main__ - INFO - Generating questions
+2025-01-04 12:21:56,555 - __main__ - INFO - Generating questions from fields
+2025-01-04 12:21:56,555 - __main__ - INFO - Processing fields and getting user input
+2025-01-04 12:22:11,225 - __main__ - INFO - Requesting suggestion from Ollama AI using model: llama3.2:latest
+2025-01-04 12:22:20,373 - __main__ - ERROR - Unexpected error while getting Ollama suggestion: Extra data: line 2 column 1 (char 103)
+2025-01-04 12:22:20,375 - __main__ - ERROR - Stack trace: Traceback (most recent call last):
+  File "C:\Users\denni\AppData\Roaming\Python\Python312\site-packages\requests\models.py", line 963, in json
+    return complexjson.loads(self.content.decode(encoding), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\json\decoder.py", line 341, in decode
+    raise JSONDecodeError("Extra data", s, end)
+json.decoder.JSONDecodeError: Extra data: line 2 column 1 (char 103)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\denni\Documents\DDS_hackathon_2025JAN_AI_challenge\process_form.py", line 315, in get_ollama_suggestion
+    suggestion = response.json()['response']
+                 ^^^^^^^^^^^^^^^
+  File "C:\Users\denni\AppData\Roaming\Python\Python312\site-packages\requests\models.py", line 971, in json
+    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+requests.exceptions.JSONDecodeError: Extra data: line 2 column 1 (char 103)
+
+2025-01-04 12:26:18,289 - __main__ - INFO - Log file created at: form_processor.log
+2025-01-04 12:26:18,289 - __main__ - INFO - Starting form processing
+2025-01-04 12:26:18,289 - __main__ - INFO - Prompting user for JSON file selection
+2025-01-04 12:26:34,168 - __main__ - INFO - User selected file: newfile.json
+2025-01-04 12:26:34,169 - __main__ - INFO - Attempting to load JSON file: newfile.json
+2025-01-04 12:26:37,136 - __main__ - INFO - Starting fresh despite existing progress
+2025-01-04 12:26:37,137 - __main__ - INFO - Selecting AI model
+2025-01-04 12:26:37,137 - __main__ - INFO - Starting model selection process
+2025-01-04 12:26:37,137 - __main__ - INFO - Fetching available Ollama models
+2025-01-04 12:26:40,673 - __main__ - INFO - User selected default model (llama3.2:latest)
+2025-01-04 12:26:40,673 - __main__ - INFO - Reading markdown file
+2025-01-04 12:26:40,673 - __main__ - INFO - Attempting to read markdown file: day1form.md
+2025-01-04 12:26:40,673 - __main__ - INFO - Extracting fields from content
+2025-01-04 12:26:40,673 - __main__ - INFO - Starting field extraction from markdown content
+2025-01-04 12:26:40,675 - __main__ - INFO - Successfully extracted 9 fields
+2025-01-04 12:26:40,675 - __main__ - INFO - Generating questions
+2025-01-04 12:26:40,676 - __main__ - INFO - Generating questions from fields
+2025-01-04 12:26:40,676 - __main__ - INFO - Processing fields and getting user input
+2025-01-04 12:26:47,576 - __main__ - INFO - Starting answer editing process
+2025-01-04 12:31:37,625 - __main__ - INFO - Log file created at: form_processor.log
+2025-01-04 12:31:37,625 - __main__ - INFO - Starting form processing
+2025-01-04 12:31:37,626 - __main__ - INFO - Prompting user for JSON file selection
+2025-01-04 12:31:40,488 - __main__ - INFO - User selected file: day1form.json
+2025-01-04 12:31:40,489 - __main__ - INFO - Attempting to load JSON file: day1form.json
+2025-01-04 12:31:42,862 - __main__ - INFO - Starting fresh despite existing progress
+2025-01-04 12:31:42,863 - __main__ - INFO - Reading markdown file
+2025-01-04 12:31:42,863 - __main__ - INFO - Attempting to read markdown file: day1form.md
+2025-01-04 12:31:42,863 - __main__ - INFO - Extracting fields from content
+2025-01-04 12:31:42,863 - __main__ - INFO - Starting field extraction from markdown content
+2025-01-04 12:31:42,864 - __main__ - INFO - Successfully extracted 9 fields
+2025-01-04 12:31:42,864 - __main__ - INFO - Generating questions
+2025-01-04 12:31:42,864 - __main__ - INFO - Generating questions from fields
+2025-01-04 12:31:42,864 - __main__ - INFO - Processing fields and getting user input
+2025-01-04 12:31:58,040 - __main__ - INFO - Saving current progress
+2025-01-04 12:32:00,615 - __main__ - INFO - Prompting user for save location
+2025-01-04 12:32:09,710 - __main__ - INFO - User selected save location: newnew.json
+2025-01-04 12:32:09,711 - __main__ - INFO - Successfully saved results to newnew.json
+2025-01-04 12:36:39,400 - __main__ - INFO - Log file created at: form_processor.log
+2025-01-04 12:36:39,400 - __main__ - INFO - Starting form processing
+2025-01-04 12:36:39,401 - __main__ - INFO - Prompting user for JSON file selection
+2025-01-04 12:36:42,718 - __main__ - INFO - User selected file: day1form.json
+2025-01-04 12:36:42,718 - __main__ - INFO - Attempting to load JSON file: day1form.json
+2025-01-04 12:36:45,406 - __main__ - INFO - Continuing with existing progress
+2025-01-04 12:36:45,407 - __main__ - INFO - Reading markdown file
+2025-01-04 12:36:45,407 - __main__ - INFO - Attempting to read markdown file: day1form.md
+2025-01-04 12:36:45,407 - __main__ - INFO - Extracting fields from content
+2025-01-04 12:36:45,408 - __main__ - INFO - Starting field extraction from markdown content
+2025-01-04 12:36:45,408 - __main__ - INFO - Successfully extracted 9 fields
+2025-01-04 12:36:45,408 - __main__ - INFO - Generating questions
+2025-01-04 12:36:45,408 - __main__ - INFO - Generating questions from fields
+2025-01-04 12:36:45,409 - __main__ - INFO - Processing fields and getting user input
+2025-01-04 12:36:48,286 - __main__ - INFO - Saving current progress
+2025-01-04 12:36:54,112 - __main__ - INFO - Successfully saved results to newtest_20250104_123654.json

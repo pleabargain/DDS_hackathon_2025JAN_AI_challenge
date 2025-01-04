@@ -6,7 +6,7 @@
     "responses": {
         "Project Title": {
             "question": "What is the title of your project?",
-            "answer": "An AI-Enhanced Form Processing System"
+            "answer": ""
         },
         "Concept Summary": {
             "question": "What is the main concept of your project and what problem does it solve?",

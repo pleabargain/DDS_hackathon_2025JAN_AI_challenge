@@ -1,7 +1,0 @@
-2025-01-04 10:35:08,530 - __main__ - INFO - Starting form processing
-2025-01-04 10:35:08,530 - __main__ - INFO - Selecting AI model
-2025-01-04 10:35:08,531 - __main__ - INFO - Starting model selection process
-2025-01-04 10:35:08,531 - __main__ - INFO - Fetching available Ollama models
-2025-01-04 10:35:08,534 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:11434
-2025-01-04 10:35:10,581 - urllib3.connectionpool - DEBUG - http://localhost:11434 "GET /api/tags HTTP/1.1" 200 None
-2025-01-04 10:35:10,593 - __main__ - DEBUG - Found models: ['llama3.3:70b-instruct-q4_K_S', 'llama3.2-vision:latest', 'marco-o1:latest', 'phi3:latest', 'research-phi3:latest', 'phi3:14b-instruct', 'qwen2.5:latest', 'llama3.2:latest', 'NAME:latest', 'llava:13b', 'mxbai-embed-large:latest', 'nomic-embed-text:latest', 'x/llama3.2-vision:latest', 'mistral:latest', 'granite3-dense:latest']
