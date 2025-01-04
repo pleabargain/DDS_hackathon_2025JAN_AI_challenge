@@ -37,21 +37,34 @@ Repository: https://github.com/pleabargain/DDS_hackathon_2025JAN_AI_challenge
 - Available commands:
   * SAVE: Save current progress
   * EDIT: Modify previous answers
-  * EXIT: Save and quit safely
+  * EXIT: Save (with optional save-as) and quit safely
+  * RETURN: Accept previous answer and continue
 - Command validation and execution
 - Consistent command handling across input contexts
+- Options display after each previous answer
 
-### 2. Factory Pattern
+### 2. UI Patterns
+- Previous Answer Display:
+  * Bold blue text formatting using ANSI codes
+  * Clear visual distinction from new input
+  * Consistent formatting across all answer types
+- Command Options:
+  * Displayed after each previous answer
+  * Clear, boxed format for visibility
+  * Consistent ordering and spacing
+  * Immediate feedback on command execution
+
+### 3. Factory Pattern
 - Question generation
 - Field extraction
 - Response formatting
 
-### 3. Observer Pattern
+### 4. Observer Pattern
 - Logging system implementation
 - Real-time updates
 - Progress tracking
 
-### 4. Strategy Pattern
+### 5. Strategy Pattern
 - AI model selection
 - Response processing
 - Data validation
@@ -64,12 +77,22 @@ Repository: https://github.com/pleabargain/DDS_hackathon_2025JAN_AI_challenge
 
 2. **Save Operation**
    ```
-   Command Detection -> Progress Capture -> JSON Serialization -> File Write
+   Command Detection -> Progress Capture -> [Optional: Save-As Prompt] -> Filename Generation -> JSON Serialization -> File Write
+   ```
+
+   Filename Generation:
+   ```
+   Project Title -> Clean/Sanitize -> Truncate -> Add Timestamp -> {project_title}_{timestamp}.json
+   ```
+
+   Exit Save Flow:
+   ```
+   EXIT Command -> Save-As Prompt -> [Yes: Smart Filename | No: Default File] -> Save Progress -> Exit
    ```
 
 3. **Load Operation**
    ```
-   File Read -> JSON Parsing -> Data Validation -> State Restoration
+   File Read -> JSON Parsing -> Data Validation -> State Restoration -> Display Previous Answers
    ```
 
 4. **Logging Flow**
@@ -123,13 +146,18 @@ project/
    - Consistent command behavior
    - Visual feedback for actions
    - Safe exit paths
+   - Bold blue text for previous answers
+   - Options display after previous answers
 
-2. **Error Management**
+3. **Error Management**
    - Comprehensive error handling
    - Detailed logging
    - User-friendly messages
 
-3. **Data Handling**
+4. **Data Handling**
    - Schema validation
    - Safe file operations
    - Progress preservation
+   - Previous answer retention
+   - Multiple save file support
+   - Save-as functionality during exit

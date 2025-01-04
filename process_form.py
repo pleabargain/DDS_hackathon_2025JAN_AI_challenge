@@ -4,16 +4,31 @@ import requests
 import sys
 import os
 import logging
+import logging.handlers
 import traceback
 from datetime import datetime
 
-# Configure logging with real-time file updates
-log_file = f'form_processor_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'
+# Configure logging with rotation and cleanup
+log_file = 'form_processor.log'
+max_bytes = 5 * 1024 * 1024  # 5MB
+backup_count = 3  # Keep 3 backup files
+
+# Clean up old log files
+for old_log in [f for f in os.listdir('.') if f.startswith('form_processor_')]:
+    try:
+        os.remove(old_log)
+    except OSError:
+        pass
+
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(log_file, mode='a', delay=False),  # immediate writes
+        logging.handlers.RotatingFileHandler(
+            log_file,
+            maxBytes=max_bytes,
+            backupCount=backup_count
+        ),
         logging.StreamHandler()
     ]
 )
@@ -70,14 +85,16 @@ def prompt_for_json_file():
         except ValueError:
             print("Please enter a valid number.")
 
-def prompt_for_save_location():
+def prompt_for_save_location(user_input="form"):
     """Prompt user for where to save the JSON file."""
     logger.info("Prompting user for save location")
     while True:
-        filename = input("\nEnter filename to save (or press Enter for 'day1form.json'): ").strip()
+        filename = input("\nEnter filename to save (or press Enter for default format): ").strip()
         if not filename:
-            logger.info("User selected default save location (day1form.json)")
-            return 'day1form.json'
+            # Generate default filename with user input and datestamp
+            datestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"{user_input}_{datestamp}.json"
+            logger.info(f"Using default filename format: {filename}")
         
         if not filename.endswith('.json'):
             filename += '.json'
@@ -90,11 +107,25 @@ def prompt_for_save_location():
         logger.info(f"User selected save location: {filename}")
         return filename
 
-def save_progress(results, prompt_save=False):
+def save_progress(results, prompt_save=False, exit_save=False):
     """Save current progress to JSON file."""
     logger.info("Saving current progress")
     try:
-        filename = prompt_for_save_location() if prompt_save else 'day1form.json'
+        # Get user input from project title if available
+        user_input = "form"
+        if "Project Title" in results.get("responses", {}):
+            title = results["responses"]["Project Title"]["answer"]
+            # Extract the actual title without the prefix and clean it
+            if title.startswith("Project Title: "):
+                title = title[14:]
+            user_input = re.sub(r'[^a-zA-Z0-9]', '_', title.lower())[:30]  # Limit length and clean
+        
+        if exit_save:
+            save_new = input("\nWould you like to save as a new file? (y/n): ").lower().strip() == 'y'
+            filename = prompt_for_save_location(user_input) if save_new else 'day1form.json'
+        else:
+            filename = prompt_for_save_location(user_input) if prompt_save else 'day1form.json'
+        
         with open(filename, 'w') as f:
             json.dump(results, f, indent=4)
         logger.info(f"Successfully saved results to {filename}")
@@ -305,9 +336,10 @@ def print_instructions():
     print("- AI will provide suggestions to enhance your answers")
     print("\nAvailable Commands:")
     print("┌─────────────────────────────────────────────┐")
-    print("│ SAVE - Save your progress at any time       │")
-    print("│ EDIT - Edit a previous answer              │")
-    print("│ EXIT - Exit the program (or press Ctrl+C)  │")
+    print("│ SAVE   - Save your progress at any time     │")
+    print("│ EDIT   - Edit a previous answer            │")
+    print("│ EXIT   - Exit the program (or press Ctrl+C)│")
+    print("│ RETURN - Accept the previous answer        │")
     print("└─────────────────────────────────────────────┘\n")
 
 def edit_answer(results, selected_model):
@@ -496,13 +528,15 @@ def main():
                 prev_answer = existing_data["responses"][field]["answer"]
                 if isinstance(prev_answer, list):
                     print(f"\n{question}")
-                    print("\033[1;34mPrevious answer:")
+                    print("\033[1;34m\033[1mPrevious answer:")
                     for item in prev_answer:
                         print(f"- {item}")
                     print("\033[0m")
+                    print("\nOptions: [save/edit/exit/return]")
                 else:
                     print(f"\n{question}")
-                    print(f"\033[1;34mPrevious answer: {prev_answer}\033[0m")
+                    print(f"\033[1;34m\033[1mPrevious answer: {prev_answer}\033[0m")
+                    print("\nOptions: [save/edit/exit/return]")
             else:
                 print(f"\n{question}")
             
@@ -517,7 +551,7 @@ def main():
                         continue
                     if feature.upper() == 'EXIT':
                         print("\nSaving progress before exit...")
-                        save_progress(results)
+                        save_progress(results, exit_save=True)
                         print("Goodbye!")
                         sys.exit(0)
                     if feature:
@@ -560,9 +594,16 @@ def main():
                     continue
                 elif user_answer.upper() == 'EXIT':
                     print("\nSaving progress before exit...")
-                    save_progress(results)
+                    save_progress(results, exit_save=True)
                     print("Goodbye!")
                     sys.exit(0)
+                elif user_answer.upper() == 'RETURN':
+                    # Keep the previous answer and continue to next question
+                    results["responses"][field] = {
+                        "question": question,
+                        "answer": prev_answer
+                    }
+                    continue
                 elif user_answer:
                     # Get AI suggestion
                     print("\nGetting AI suggestion...")

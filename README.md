@@ -13,7 +13,7 @@ A Python-based form processing system that helps users provide better-quality re
 - Choose JSON file to load from local directory
 - Choose custom save location for JSON files
 - Project titles automatically formatted (e.g., "Project Title: My Project")
-- Previous answers shown in blue when continuing progress
+- Previous answers shown in bold blue text when continuing progress
 - Detailed logging for system monitoring
 - JSON schema validation for form data
 - Example test data provided
@@ -47,13 +47,20 @@ A Python-based form processing system that helps users provide better-quality re
    Available Commands:
    - Type 'SAVE' at any time to save your progress
    - Type 'EDIT' to modify a previous answer
-   - Type 'EXIT' to save and quit (or press Ctrl+C)
+   - Type 'EXIT' to save and quit (with option to save as new file)
+   - Type 'RETURN' to accept the previous answer and continue
 
    Additional Features:
-   - Previous answers shown in blue when continuing from saved progress
+   - Previous answers shown in bold blue text when continuing from saved progress
+   - User options displayed after each previous answer
    - Choose where to save your JSON file at completion
 
-4. Your responses will be saved in `day1form.json`
+4. Your responses will be saved with smart file naming:
+   - Default format: `{project_title}_{timestamp}.json` (e.g., `my_project_20240104_120702.json`)
+   - Project title is automatically cleaned and truncated for filename compatibility
+   - You can also specify a custom filename if desired
+   - When exiting, you'll be asked if you want to save as a new file
+   - If no, it saves to the default location (`day1form.json`)
 
 ## Logging
 
