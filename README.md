@@ -1,106 +1,70 @@
-# AI-Assisted Form Processing Tool
+# AI-Enhanced Form Processing System
 
-# repo
-https://github.com/pleabargain/DDS_hackathon_2025JAN_AI_challenge
+A Python-based form processing system that helps users provide better-quality responses through AI-powered suggestions and real-time feedback.
 
+## Features
 
-## Project Overview
-This project is part of the DDS Hackathon 2025 January AI Challenge. It consists of a Python script that processes a form template (`day1form.md`) and creates a JSON file with AI-assisted responses using Ollama.
+- AI-powered response suggestions using Ollama API
+- Real-time form validation and feedback
+- Save progress at any time by typing 'SAVE'
+- Load and continue from previous progress
+- Choose JSON file to load from local directory
+- Choose custom save location for JSON files
+- Project titles automatically formatted (e.g., "Project Title: My Project")
+- Previous answers shown in blue when continuing progress
+- Detailed logging for system monitoring
+- JSON schema validation for form data
+- Example test data provided
 
-## Purpose
-The tool helps users create detailed project plans by:
-1. Converting form fields into interactive questions
-2. Using Ollama AI to generate suggested responses
-3. Allowing users to review and customize AI suggestions
-4. Storing the final responses in a structured JSON format
+## Files
 
-## Technical Requirements
-- Python
-- Ollama AI engine (with at least one model installed)
-- Required Python packages (install via requirements.txt)
-
-## Installation
-```bash
-# Install Python dependencies
-pip install -r requirements.txt
-
-# Install/Update Ollama
-pip install -U ollama
-```
-
-## Ollama Model Support
-The tool now supports multiple Ollama models:
-1. Lists all available models on your system
-2. Allows selection of preferred model (defaults to llama3.2:latest)
-3. Stores model choice in output metadata
-
-## Project Structure
-```
-.
-├── day1form.md          # Template form with project planning fields
-├── instructions.md      # Project requirements and specifications
-├── process_form.py      # Main script for form processing
-├── test_ollama.py      # Ollama setup verification script
-├── requirements.txt     # Python package dependencies
-├── CHANGELOG.md        # Project changes and roadmap
-└── day1form.json       # Output file (generated during execution)
-```
-
-## How It Works
-1. The script reads the `day1form.md` template
-2. Converts each form field into a question-answer pair
-3. For each question:
-   - Prompts user for input
-   - Passes input to Ollama for processing
-   - Shows AI-generated suggestion
-   - Allows user to accept or reject suggestion
-   - Stores final answer in JSON format
-4. Creates/updates `day1form.json` with all responses
-
-## Form Fields
-- Project Title
-- Concept Summary
-- Target Audience
-- Key Features
-- Technical Approach
-- Expected Challenges
-- Submission Format
-- Expected Outcome
-- Additional Notes (Optional)
-
-## JSON Structure
-```json
-{
-  "metadata": {
-    "model": "selected_model_name",
-    "timestamp": "ISO-8601 timestamp"
-  },
-  "responses": {
-    "Project Title": {
-      "question": "What is the title of your project?",
-      "answer": "[User's approved response]"
-    }
-    // Additional fields follow the same pattern
-  }
-}
-```
+- `process_form.py`: Main form processing script
+- `schema.json`: JSON schema for form data validation
+- `test_data.json`: Example form data
+- `day1form.md`: Form template in markdown format
+- `day1form.json`: Generated form responses
+- `form_processor_*.log`: Real-time logging files
 
 ## Usage
-1. Ensure Python is installed on your system
-2. Install required packages: `pip install requests`
-3. Make sure Ollama AI engine is running
-4. Run the test script to verify setup: `python test_ollama.py`
-5. Run the main script: `python process_form.py`
-6. Select your preferred AI model from the list
-7. Follow the interactive prompts
-8. Review AI suggestions (enter 'y' to accept or 'n' to provide alternative)
-9. Check generated `day1form.json` for final output
 
-## Testing Ollama Setup
-The included `test_ollama.py` script helps verify your Ollama installation:
-- Checks if Ollama API is accessible
-- Verifies model availability
-- Provides clear error messages and setup instructions
+1. Ensure you have Python installed and Ollama running
+2. Run the script:
+   ```bash
+   python process_form.py
+   ```
 
-## Development Status
-This project is being developed as part of the DDS Hackathon 2025 January AI Challenge, focusing on creating an AI-assisted project planning tool.
+3. Follow the on-screen instructions:
+   - Select a JSON file to load (or use default)
+   - Choose to continue progress or start fresh
+   - Answer each question thoroughly
+   - AI will provide suggestions to enhance your answers
+   - Type 'SAVE' at any time to save your progress
+   - Previous answers will be shown in blue when continuing from saved progress
+   - Choose where to save your JSON file at completion
+   - Press Ctrl+C to exit
+
+4. Your responses will be saved in `day1form.json`
+
+## Logging
+
+The system creates detailed logs in real-time, saved to `form_processor_[timestamp].log`. These logs include:
+- System operations
+- User interactions
+- AI suggestions
+- Error tracking
+- Progress updates
+
+## Data Files
+
+- `schema.json`: Defines the structure and validation rules for form data
+- `test_data.json`: Contains example data showing the expected format
+- `day1form.json`: Stores your actual form responses
+
+## Error Handling
+
+The system includes comprehensive error handling for:
+- File operations
+- API connections
+- User interruptions
+- Data validation
+- Progress saving/loading

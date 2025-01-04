@@ -2,20 +2,109 @@ import json
 import re
 import requests
 import sys
+import os
 import logging
 import traceback
 from datetime import datetime
 
-# Configure logging
+# Configure logging with real-time file updates
+log_file = f'form_processor_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'
 logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(f'form_processor_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'),
+        logging.FileHandler(log_file, mode='a', delay=False),  # immediate writes
         logging.StreamHandler()
     ]
 )
 logger = logging.getLogger(__name__)
+logger.info(f"Log file created at: {log_file}")
+
+def load_json(file_path):
+    """Load and return contents of a JSON file."""
+    logger.info(f"Attempting to load JSON file: {file_path}")
+    try:
+        with open(file_path, 'r') as file:
+            data = json.load(file)
+            logger.debug(f"Successfully loaded JSON from {file_path}")
+            return data
+    except FileNotFoundError:
+        logger.error(f"File not found: {file_path}")
+        return None
+    except json.JSONDecodeError as e:
+        logger.error(f"Error decoding JSON from {file_path}: {str(e)}")
+        return None
+    except Exception as e:
+        logger.error(f"Error reading file {file_path}: {str(e)}")
+        logger.error(f"Stack trace: {traceback.format_exc()}")
+        return None
+
+def prompt_for_json_file():
+    """Prompt user to select a JSON file from local directory."""
+    logger.info("Prompting user for JSON file selection")
+    print("\nAvailable JSON files in current directory:")
+    json_files = [f for f in os.listdir('.') if f.endswith('.json')]
+    
+    if not json_files:
+        logger.warning("No JSON files found in current directory")
+        print("No JSON files found in current directory")
+        return 'day1form.json'  # default
+    
+    for i, file in enumerate(json_files, 1):
+        print(f"{i}. {file}")
+    
+    while True:
+        try:
+            choice = input("\nSelect a file number (or press Enter for default 'day1form.json'): ").strip()
+            if not choice:
+                logger.info("User selected default file (day1form.json)")
+                return 'day1form.json'
+            
+            choice_idx = int(choice) - 1
+            if 0 <= choice_idx < len(json_files):
+                selected_file = json_files[choice_idx]
+                logger.info(f"User selected file: {selected_file}")
+                return selected_file
+            else:
+                print("Invalid selection. Please try again.")
+        except ValueError:
+            print("Please enter a valid number.")
+
+def prompt_for_save_location():
+    """Prompt user for where to save the JSON file."""
+    logger.info("Prompting user for save location")
+    while True:
+        filename = input("\nEnter filename to save (or press Enter for 'day1form.json'): ").strip()
+        if not filename:
+            logger.info("User selected default save location (day1form.json)")
+            return 'day1form.json'
+        
+        if not filename.endswith('.json'):
+            filename += '.json'
+        
+        if os.path.exists(filename):
+            overwrite = input(f"\n{filename} already exists. Overwrite? (y/n): ").lower()
+            if overwrite != 'y':
+                continue
+        
+        logger.info(f"User selected save location: {filename}")
+        return filename
+
+def save_progress(results, prompt_save=False):
+    """Save current progress to JSON file."""
+    logger.info("Saving current progress")
+    try:
+        filename = prompt_for_save_location() if prompt_save else 'day1form.json'
+        with open(filename, 'w') as f:
+            json.dump(results, f, indent=4)
+        logger.info(f"Successfully saved results to {filename}")
+        print(f"\nProgress saved to {filename}")
+        return True
+    except Exception as e:
+        logger.error(f"Error saving progress: {str(e)}")
+        logger.error(f"Stack trace: {traceback.format_exc()}")
+        print("\nError saving progress!")
+        return False
 
 def read_markdown_file(file_path):
     """Read and return contents of markdown file."""
@@ -43,6 +132,7 @@ def extract_fields(content):
         
         fields = {}
         current_field = None
+        key_features = []
         
         for line in lines:
             # Skip empty lines
@@ -52,11 +142,15 @@ def extract_fields(content):
             # If line ends with colon, it's a field name
             if line.endswith(':'):
                 current_field = line[:-1].strip()
-                fields[current_field] = ""
+                fields[current_field] = [] if current_field == "Key Features" else ""
                 logger.debug(f"Found new field: {current_field}")
             # If line starts with number and dot (like "1."), it's part of Key Features
             elif re.match(r'^\d+\.$', line.strip()):
-                continue
+                if current_field == "Key Features":
+                    feature = line.strip()[line.strip().find('.')+1:].strip()
+                    if feature:
+                        fields[current_field].append(feature)
+                        logger.debug(f"Added feature: {feature}")
             # If line is just underscores, skip it
             elif all(c == '_' for c in line.strip()):
                 continue
@@ -65,11 +159,12 @@ def extract_fields(content):
                 continue
             # Otherwise, if we have a current field, add content
             elif current_field and line.strip():
-                if fields[current_field]:
-                    fields[current_field] += " " + line.strip()
-                else:
-                    fields[current_field] = line.strip()
-                logger.debug(f"Added content to {current_field}")
+                if current_field != "Key Features":
+                    if fields[current_field]:
+                        fields[current_field] += " " + line.strip()
+                    else:
+                        fields[current_field] = line.strip()
+                    logger.debug(f"Added content to {current_field}")
         
         logger.info(f"Successfully extracted {len(fields)} fields")
         return fields
@@ -78,6 +173,7 @@ def extract_fields(content):
         logger.error(f"Error extracting fields: {str(e)}")
         logger.error(f"Stack trace: {traceback.format_exc()}")
         raise
+
 def generate_questions(fields):
     """Generate questions from field names."""
     logger.info("Generating questions from fields")
@@ -91,7 +187,7 @@ def generate_questions(fields):
         elif field == "Target Audience":
             questions[field] = "Who is the target audience for your project and what are their needs?"
         elif field == "Key Features":
-            questions[field] = "What are the main features or functionalities of your application?"
+            questions[field] = "What are the main features or functionalities of your application? (Enter one at a time, type 'done' when finished)"
         elif field == "Technical Approach":
             questions[field] = "How do you plan to implement your project technically?"
         elif field == "Expected Challenges":
@@ -124,10 +220,29 @@ def select_model():
     """Prompt user to select an Ollama model."""
     logger.info("Starting model selection process")
     models = get_available_models()
+    default_model = "llama3.2:latest"
     
     if not models:
-        logger.warning("No models found, defaulting to llama3.2:latest")
-        return "llama3.2:latest"
+        logger.warning(f"No models found, checking if {default_model} is available")
+        try:
+            response = requests.post(
+                'http://localhost:11434/api/generate',
+                json={"model": default_model, "prompt": "test"}
+            )
+            if response.status_code == 200:
+                logger.info(f"{default_model} is available")
+                return default_model
+            else:
+                logger.error(f"Failed to use {default_model}. Please ensure it's installed.")
+                print(f"\nERROR: {default_model} is not available")
+                print(f"Please run: ollama pull {default_model}")
+                sys.exit(1)
+        except requests.exceptions.ConnectionError:
+            logger.error("Could not connect to Ollama API")
+            print("\nERROR: Could not connect to Ollama API")
+            print("Please ensure Ollama is installed and running")
+            print("Installation instructions: https://ollama.ai/download")
+            sys.exit(1)
     
     print("\nAvailable models:")
     for i, model in enumerate(models, 1):
@@ -135,10 +250,10 @@ def select_model():
     
     while True:
         try:
-            choice = input("\nSelect a model number (or press Enter for default 'llama3.2:latest'): ").strip()
+            choice = input(f"\nSelect a model number (or press Enter for default '{default_model}'): ").strip()
             if not choice:
-                logger.info("User selected default model (llama3.2:latest)")
-                return "llama3.2:latest"
+                logger.info(f"User selected default model ({default_model})")
+                return default_model
             
             choice_idx = int(choice) - 1
             if 0 <= choice_idx < len(models):
@@ -183,9 +298,56 @@ def get_ollama_suggestion(answer, model):
         logger.error(f"Stack trace: {traceback.format_exc()}")
         return None
 
+def print_instructions():
+    """Print usage instructions."""
+    print("\nForm Processing Instructions:")
+    print("- Answer each question as thoroughly as possible")
+    print("- AI will provide suggestions to enhance your answers")
+    print("- Type 'SAVE' at any time to save your progress")
+    print("- Press Ctrl+C to exit\n")
+
+def format_title_answer(answer):
+    """Format the title answer with 'Project Title: ' prefix if not present."""
+    if not answer.startswith("Project Title:"):
+        return f"Project Title: {answer}"
+    return answer
+
 def main():
     logger.info("Starting form processing")
     try:
+        print_instructions()
+        
+        # Prompt for JSON file to load
+        json_file = prompt_for_json_file()
+        existing_data = load_json(json_file)
+        if existing_data:
+            print("\nFound existing progress. Would you like to:")
+            print("1. Continue from where you left off")
+            print("2. Start fresh")
+            choice = input("\nEnter your choice (1/2): ").strip()
+            if choice == '1':
+                results = existing_data
+                print("\nLoading previous progress...")
+                logger.info("Continuing with existing progress")
+            else:
+                results = {
+                    "metadata": {
+                        "model": None,
+                        "timestamp": datetime.now().isoformat()
+                    },
+                    "responses": {}
+                }
+                logger.info("Starting fresh despite existing progress")
+        else:
+            results = {
+                "metadata": {
+                    "model": None,
+                    "timestamp": datetime.now().isoformat()
+                },
+                "responses": {}
+            }
+            logger.info("Starting fresh - no existing progress found")
+
         # Select AI model
         logger.info("Selecting AI model")
         selected_model = select_model()
@@ -202,58 +364,120 @@ def main():
         logger.info("Generating questions")
         questions = generate_questions(fields)
         
-        # Initialize results dictionary with metadata
-        results = {
-            "metadata": {
-                "model": selected_model,
-                "timestamp": datetime.now().isoformat()
-            },
-            "responses": {}
-        }
+        # Update metadata if starting fresh
+        if not existing_data:
+            results = {
+                "metadata": {
+                    "model": selected_model,
+                    "timestamp": datetime.now().isoformat()
+                },
+                "responses": {}
+            }
+        else:
+            # Update only the model in existing data
+            results["metadata"]["model"] = selected_model
         
         # Process each field
         logger.info("Processing fields and getting user input")
         for field, question in questions.items():
-            print(f"\n{question}")
-            user_answer = input("Your answer: ").strip()
+            # Display previous answer if it exists
+            if existing_data and field in existing_data["responses"]:
+                prev_answer = existing_data["responses"][field]["answer"]
+                if isinstance(prev_answer, list):
+                    print(f"\n{question}")
+                    print("\033[1;34mPrevious answer:")
+                    for item in prev_answer:
+                        print(f"- {item}")
+                    print("\033[0m")
+                else:
+                    print(f"\n{question}")
+                    print(f"\033[1;34mPrevious answer: {prev_answer}\033[0m")
+            else:
+                print(f"\n{question}")
             
-            if user_answer:
-                # Get AI suggestion
-                print("\nGetting AI suggestion...")
-                suggestion = get_ollama_suggestion(user_answer)
-                
-                if suggestion:
-                    print(f"\nAI Suggestion: {suggestion}")
-                    satisfied = input("\nAre you satisfied with this suggestion? (y/n): ").lower()
-                    
-                    while satisfied != 'y':
-                        user_answer = input("\nPlease provide a new answer: ").strip()
-                        print("\nGetting new AI suggestion...")
-                        suggestion = get_ollama_suggestion(user_answer)
+            if field == "Key Features":
+                features = []
+                while True:
+                    feature = input("Enter feature (or 'done' to finish): ").strip()
+                    if feature.lower() == 'done':
+                        break
+                    if feature.upper() == 'SAVE':
+                        save_progress(results)
+                        continue
+                    if feature:
+                        # Get AI suggestion for each feature
+                        print("\nGetting AI suggestion...")
+                        suggestion = get_ollama_suggestion(feature, selected_model)
+                        
                         if suggestion:
                             print(f"\nAI Suggestion: {suggestion}")
                             satisfied = input("\nAre you satisfied with this suggestion? (y/n): ").lower()
+                            
+                            while satisfied != 'y':
+                                feature = input("\nPlease provide a new feature: ").strip()
+                                print("\nGetting new AI suggestion...")
+                                suggestion = get_ollama_suggestion(feature, selected_model)
+                                if suggestion:
+                                    print(f"\nAI Suggestion: {suggestion}")
+                                    satisfied = input("\nAre you satisfied with this suggestion? (y/n): ").lower()
+                                else:
+                                    print("Using your original feature due to AI service error.")
+                                    suggestion = feature
+                                    satisfied = 'y'
+                            
+                            features.append(suggestion)
                         else:
-                            print("Using your original answer due to AI service error.")
-                            suggestion = user_answer
-                            satisfied = 'y'
-                    
+                            features.append(feature)
+                
                 results["responses"][field] = {
                     "question": question,
-                    "answer": suggestion
+                    "answer": features
                 }
             else:
-                results["responses"][field] = {
-                    "question": question,
-                    "answer": user_answer
-                }
+                user_answer = input("Your answer: ").strip()
+                
+                if user_answer.upper() == 'SAVE':
+                    save_progress(results)
+                    continue
+                elif user_answer:
+                    # Get AI suggestion
+                    print("\nGetting AI suggestion...")
+                    suggestion = get_ollama_suggestion(user_answer, selected_model)
+                    
+                    if suggestion:
+                        print(f"\nAI Suggestion: {suggestion}")
+                        satisfied = input("\nAre you satisfied with this suggestion? (y/n): ").lower()
+                        
+                        while satisfied != 'y':
+                            user_answer = input("\nPlease provide a new answer: ").strip()
+                            print("\nGetting new AI suggestion...")
+                            suggestion = get_ollama_suggestion(user_answer, selected_model)
+                            if suggestion:
+                                print(f"\nAI Suggestion: {suggestion}")
+                                satisfied = input("\nAre you satisfied with this suggestion? (y/n): ").lower()
+                            else:
+                                print("Using your original answer due to AI service error.")
+                                suggestion = user_answer
+                                satisfied = 'y'
+                        
+                    final_answer = suggestion if suggestion else user_answer
+                    if field == "Project Title":
+                        final_answer = format_title_answer(final_answer)
+                    
+                    results["responses"][field] = {
+                        "question": question,
+                        "answer": final_answer
+                    }
+                else:
+                    results["responses"][field] = {
+                        "question": question,
+                        "answer": user_answer
+                    }
         
-        # Save results to JSON file
-        logger.info("Saving results to JSON file")
-        with open('day1form.json', 'w') as f:
-            json.dump(results, f, indent=4)
-        logger.info("Successfully saved results to day1form.json")
-        print("\nForm processing complete! Results saved to day1form.json")
+        # Final save with prompt
+        logger.info("Form processing complete - prompting for save location")
+        save_progress(results, prompt_save=True)
+        print("\nForm processing complete!")
         
     except KeyboardInterrupt:
         logger.warning("Process interrupted by user")

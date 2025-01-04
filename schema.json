@@ -1,0 +1,136 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["metadata", "responses"],
+    "properties": {
+        "metadata": {
+            "type": "object",
+            "required": ["model", "timestamp"],
+            "properties": {
+                "model": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "responses": {
+            "type": "object",
+            "properties": {
+                "Project Title": {
+                    "type": "object",
+                    "required": ["question", "answer"],
+                    "properties": {
+                        "question": {
+                            "type": "string"
+                        },
+                        "answer": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "Concept Summary": {
+                    "type": "object",
+                    "required": ["question", "answer"],
+                    "properties": {
+                        "question": {
+                            "type": "string"
+                        },
+                        "answer": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "Target Audience": {
+                    "type": "object",
+                    "required": ["question", "answer"],
+                    "properties": {
+                        "question": {
+                            "type": "string"
+                        },
+                        "answer": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "Key Features": {
+                    "type": "object",
+                    "required": ["question", "answer"],
+                    "properties": {
+                        "question": {
+                            "type": "string"
+                        },
+                        "answer": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "Technical Approach": {
+                    "type": "object",
+                    "required": ["question", "answer"],
+                    "properties": {
+                        "question": {
+                            "type": "string"
+                        },
+                        "answer": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "Expected Challenges": {
+                    "type": "object",
+                    "required": ["question", "answer"],
+                    "properties": {
+                        "question": {
+                            "type": "string"
+                        },
+                        "answer": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "Submission Format": {
+                    "type": "object",
+                    "required": ["question", "answer"],
+                    "properties": {
+                        "question": {
+                            "type": "string"
+                        },
+                        "answer": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "Expected Outcome": {
+                    "type": "object",
+                    "required": ["question", "answer"],
+                    "properties": {
+                        "question": {
+                            "type": "string"
+                        },
+                        "answer": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "Additional Notes": {
+                    "type": "object",
+                    "required": ["question", "answer"],
+                    "properties": {
+                        "question": {
+                            "type": "string"
+                        },
+                        "answer": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

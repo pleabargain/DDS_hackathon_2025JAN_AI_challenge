@@ -1,0 +1,40 @@
+{
+    "metadata": {
+        "model": "llama3.2:latest",
+        "timestamp": "2025-01-04T10:52:10.400918"
+    },
+    "responses": {
+        "Project Title": {
+            "question": "What is the title of your project?",
+            "answer": "create AI solution assistant"
+        },
+        "Concept Summary": {
+            "question": "What is the main concept of your project and what problem does it solve?",
+            "answer": "helps users avoid pro con dilemma and helps users create probability scenarios"
+        },
+        "Target Audience": {
+            "question": "Who is the target audience for your project and what are their needs?",
+            "answer": "me"
+        },
+        "Key Features": {
+            "question": "What are the main features or functionalities of your application? (Enter one at a time, type 'done' when finished)",
+            "answer": []
+        },
+        "Technical Approach": {
+            "question": "How do you plan to implement your project technically?",
+            "answer": "python"
+        },
+        "Expected Challenges": {
+            "question": "What challenges do you anticipate and how will you address them?",
+            "answer": "API requests"
+        },
+        "Submission Format": {
+            "question": "How will you present your final submission?",
+            "answer": "python and githbu"
+        },
+        "Expected Outcome": {
+            "question": "What are your goals for this project?",
+            "answer": "money"
+        }
+    }
+}
