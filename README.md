@@ -1,5 +1,9 @@
 # AI-Assisted Form Processing Tool
 
+# repo
+https://github.com/pleabargain/DDS_hackathon_2025JAN_AI_challenge
+
+
 ## Project Overview
 This project is part of the DDS Hackathon 2025 January AI Challenge. It consists of a Python script that processes a form template (`day1form.md`) and creates a JSON file with AI-assisted responses using Ollama.
 
