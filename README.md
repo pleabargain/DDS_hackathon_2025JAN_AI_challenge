@@ -1,5 +1,9 @@
 # Form Processing System
 
+Project Statistics:
+- Total Lines of Code: 705 (Python: 365, JSON: 340)
+- Total Lines of Documentation: 430 (README, instructions, forms, and other docs)
+
 A Python-based system designed for efficient form management and structured documentation. The system helps users provide comprehensive and organized responses when filling out project documentation forms.
 
 ## Features
